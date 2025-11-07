@@ -1,14 +1,14 @@
 import express from 'express';
 import { createVehicle, getVehiclesByCustomer,getAllVehicles,modifyVehicle,deleteVehicle } from '../controllers/vehicle_controller.js';
-import { mockAuth } from '../config/authmiddleware.js';
+import { authenticateUser } from '../config/authmiddleware.js';
 const router=express.Router();
 
-router.post("/add_vehicles",mockAuth,createVehicle);
-router.get("/get_vehicles",mockAuth,getVehiclesByCustomer);
-router.get("/get_all_vehicles",mockAuth,getAllVehicles);
+router.post("/add_vehicles",authenticateUser,createVehicle);
+router.get("/get_vehicles",authenticateUser,getVehiclesByCustomer);
+router.get("/get_all_vehicles",authenticateUser,getAllVehicles);
 
-router.put("/update_vehicle/:id",mockAuth,modifyVehicle);
-router.delete("/delete_vehicle/:id",mockAuth,deleteVehicle);
+router.put("/update_vehicle/:id",authenticateUser,modifyVehicle);
+router.delete("/delete_vehicle/:id",authenticateUser,deleteVehicle);
 
 
 export default router;

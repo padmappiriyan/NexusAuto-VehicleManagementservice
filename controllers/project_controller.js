@@ -1,4 +1,4 @@
-import Project from "../models/project_schema.js";
+import Project from "../models/Project_schema.js";
 import Vehicle from "../models/vehicle_schema.js";
 
 import mongoose from "mongoose";

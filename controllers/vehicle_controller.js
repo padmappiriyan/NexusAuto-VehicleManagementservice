@@ -2,36 +2,55 @@ import Vehicle from "../models/vehicle_schema.js";
 
 // Create a new vehicle
 export const createVehicle = async (req, res) => {
-    try{
-         const { vehicleType, brand, model, year, licensePlate, color, notes } = req.body;
-         const customerId = req.customerId;
-         if(!customerId){
-            return res.status(400).json({message:"User not authenticated"});
-         }
-         const newVehicle = new Vehicle({
-            customerId,
-            vehicleType,
-            brand,  
-            model,
-            year,
-            licensePlate,   
-            color,
-            notes
-            });
-        const savedVehicle = await newVehicle.save();
-        const { customerId:_, ...vehicleData } = savedVehicle.toObject();
-        res.status(201).json({
-            message: "Vehicle created successfully",
-            vehicle: vehicleData
-        });
+  try {
+    const { vehicleType, brand, model, year, licensePlate, color, notes } = req.body;
+    console.log("Request Body:", req.body);
 
+    const customerId = req.customerId;
+    if (!customerId) {
+      return res.status(400).json({ message: "User not authenticated" });
     }
-    catch(error){
-        res.status(500).json({
-            message: "Server Error",
-            error: error.message});
-    }
-}
+
+    // Save vehicle in DB
+    const newVehicle = new Vehicle({
+      customerId,
+      vehicleType,
+      brand,
+      model,
+      year,
+      licensePlate,
+      color,
+      notes,
+    });
+
+    const savedVehicle = await newVehicle.save();
+
+    // Pick only the needed fields to send in response
+    const filteredVehicle = {
+      _id: savedVehicle._id,
+      vehicleType: savedVehicle.vehicleType,
+      brand: savedVehicle.brand,
+      model: savedVehicle.model,
+      year: savedVehicle.year,
+      licensePlate: savedVehicle.licensePlate,
+      color: savedVehicle.color,
+      notes: savedVehicle.notes,
+    };
+
+    //  Send only filtered data
+    res.status(201).json({
+      message: "Vehicle created successfully",
+      vehicle: filteredVehicle,
+    });
+    
+  } catch (error) {
+    console.error("Error creating vehicle:", error);
+    res.status(500).json({
+      message: "Failed to create vehicle",
+      error: error.message,
+    });
+  }
+};
 
 // Get all vehicles for a customer
 export const getVehiclesByCustomer = async (req, res) => {
