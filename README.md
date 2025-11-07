@@ -35,7 +35,7 @@ Employees can view their assigned tasks, mark them as completed once finished, a
 - MongoDB for database  
 - REST API for communication between services  
 
----
 
-## 📂 **Folder Structure**
+
+
 
