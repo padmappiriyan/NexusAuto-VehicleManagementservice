@@ -54,22 +54,27 @@ export const createVehicle = async (req, res) => {
 
 // Get all vehicles for a customer
 export const getVehiclesByCustomer = async (req, res) => {
-    try{
-        const customerId = req.customerId;
-        if(!customerId){
-            return res.status(400).json({message:"User not authenticated"});
-         }
-        const vehicles = await Vehicle.find({ customerId });
-        res.status(200).json({
-            vehicles
-        });
-    }   
-    catch(error){
-        res.status(500).json({
-            message: "Server Error",
-            error: error.message});
+  try {
+    const customerId = req.customerId;
+
+    if (!customerId) {
+      return res.status(400).json({ message: "User not authenticated" });
     }
-}
+
+    // Only select the required fields
+    const vehicles = await Vehicle.find({ customerId })
+      .select("vehicleType brand model year licensePlate color notes _id");
+
+    return res.status(200).json(vehicles);
+  } 
+  catch (error) {
+    return res.status(500).json({
+      message: "Server Error",
+      error: error.message,
+    });
+  }
+};
+
 
 
 export const getAllVehicles = async (req, res) => {

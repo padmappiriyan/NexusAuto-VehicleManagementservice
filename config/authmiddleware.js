@@ -20,10 +20,10 @@ export const authenticateUser = (req, res, next) => {
     const decoded = jwt.verify(token, decodedSecret, { algorithms: ["HS256"] });
     console.log("Decoded JWT:", decoded);
 
-    // Attach decoded user info to request
+    
     req.user = decoded;
     console.log(decoded.userId);
-    req.userEmail = decoded.sub; // "sub" from Spring Boot is usually the email
+    req.userEmail = decoded.sub; 
     req.customerId=decoded.userId;
 
     next();
